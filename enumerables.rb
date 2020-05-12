@@ -18,11 +18,11 @@ module Enumerable
   end
 
   def my_select
-    selected = []
-    selected.my_each do |i|
-      selected.push(i) if yield(i) == true
+    array = []
+    array.my_each do |i|
+      array.push(i) if yield(i) == true
     end
-    selected
+    array
   end
 
 
