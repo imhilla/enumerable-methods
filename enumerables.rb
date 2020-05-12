@@ -52,6 +52,16 @@ module Enumerable
     return true
   end
 
+  def my_count
+    count = 0
+    self.my_each do |i|
+      if yield(i) == true
+        count += 1
+      end
+    end
+    count
+  end
+
 
 
 
