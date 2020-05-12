@@ -25,12 +25,22 @@ module Enumerable
     array
   end
 
-  def my_all
+  def my_all?
     array.my_each do |i|
-    if yield(i) == false
-      return false
-    end
+      if yield(i) == false
+        return false
+      end
+    end 
     return true
+  end
+
+  def my_any?
+    select.my_each do |i|
+      if yield(i) == true
+        return true
+      end
+    end
+    return false
   end
 
 
