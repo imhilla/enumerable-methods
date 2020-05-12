@@ -43,6 +43,15 @@ module Enumerable
     return false
   end
 
+  def my_none?
+    self.my_each do |i|
+      if yield(i) == true
+        return false
+      end
+    end
+    return true
+  end
+
 
 
 
