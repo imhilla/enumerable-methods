@@ -25,6 +25,14 @@ module Enumerable
     array
   end
 
+  def my_all
+    array.my_each do |i|
+    if yield(i) == false
+      return false
+    end
+    return true
+  end
+
 
 
 
