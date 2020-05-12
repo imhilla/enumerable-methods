@@ -17,6 +17,14 @@ module Enumerable
     self
   end
 
+  def my_select
+    selected = []
+    selected.my_each do |i|
+      selected.push(i) if yield(i) == true
+    end
+    selected
+  end
+
 
 
 
