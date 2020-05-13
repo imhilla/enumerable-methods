@@ -34,9 +34,9 @@ module Enumerable
         my_each { |value| return false unless value}
       end
     elsif pattern.is_a?(Regexp)
-      my_each { |val| return false unless val.match(pattern) }
+      my_each { |val| return false unless value.match(pattern) }
     elsif pattern.is_a?(Module)
-      my_each { |val| return false unless val.is_a?(pattern) }
+      my_each { |val| return false unless value.is_a?(pattern) }
     else
       my_each { |value| return false unless value == pattern}
     end
@@ -63,8 +63,11 @@ module Enumerable
 
   def my_count
     count = 0
+
     self.my_each do |i|
-      if yield(i) == true
+      if block_given?
+        count += 1 if yield(i)
+      else
         count += 1
       end
     end
@@ -83,8 +86,14 @@ module Enumerable
     mapped
   end
 
-  def my_inject
-    
+  def my_inject(initial = nil)
+    total ||= self.first
+    self.my_each_with_index do |value, index|
+      unless (index == 0 && total == self.first)
+        total = yield(total, value)
+      end
+    end
+    total
   end
 
 end
