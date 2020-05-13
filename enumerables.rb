@@ -34,31 +34,45 @@ module Enumerable
         my_each { |value| return false unless value}
       end
     elsif pattern.is_a?(Regexp)
-      my_each { |val| return false unless value.match(pattern) }
+      my_each { |value| return false unless value.match(pattern) }
     elsif pattern.is_a?(Module)
-      my_each { |val| return false unless value.is_a?(pattern) }
+      my_each { |value| return false unless value.is_a?(pattern) }
     else
       my_each { |value| return false unless value == pattern}
     end
     true
   end
 
-  def my_any?
-    select.my_each do |i|
-      if yield(i) == true
-        return true
+  def my_any?(pattern)
+    if pattern.nil?
+      if block_given?
+        my_each { |value| return true if yield(value)}
+      else my_each { |value| return true if value }
       end
+    elsif pattern.is_a?(Regexp)
+      my_each { |value| return true if value.match(pattern) }
+    elsif pattern.is_a?(Module)
+      my_each { |value| return true if value.is_a?(pattern) }
+    else
+      my_each { |value| return true if value == pattern }
     end
-    return false
+    false
   end
 
-  def my_none?
-    self.my_each do |i|
-      if yield(i) == true
-        return false
+  def my_none?(pattern)
+    if pattern.nil?
+      if block_given?
+        my_each { |value| return false if yield(value)}
+      else my_each { |value| return false if value }
       end
+    elsif pattern.is_a?(Regexp)
+      my_each { |value| return false if value.match(pattern) }
+    elsif pattern.is_a?(Module)
+      my_each { |value| return false if value.is_a?(pattern) }
+    else
+      my_each { |value| return false if value == pattern }
     end
-    return true
+    true
   end
 
   def my_count
@@ -74,26 +88,12 @@ module Enumerable
     count
   end
 
-  def my_map(a_proc = nil)
-    mapped = []
-      self.my_each do |i|
-        if a_proc && block_given?
-          mapped << a_proc.call(yield(i))
-        elsif block_given? == false
-          mapped << a_proc.call(i)
-        end
-      end
-    mapped
+  def my_map
+  
   end
 
-  def my_inject(initial = nil)
-    total ||= self.first
-    self.my_each_with_index do |value, index|
-      unless (index == 0 && total == self.first)
-        total = yield(total, value)
-      end
-    end
-    total
+  def my_inject
+   
   end
 
 end
