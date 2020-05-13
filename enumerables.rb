@@ -18,6 +18,7 @@ module Enumerable
   end
 
   def my_select
+    return enum_for unless block_given?
     array = []
     array.my_each do |i|
       array.push(i) if yield(i) == true
@@ -25,13 +26,21 @@ module Enumerable
     array
   end
 
-  def my_all?
-    array.my_each do |i|
-      if yield(i) == false
-        return false
+  def my_all?(pattern)
+    if pattern.nil?
+      if block_given?
+        my_each { |value| return false unless yield(value)}
+      else
+        my_each { |value| return false unless value}
       end
-    end 
-    return true
+    elsif pattern.is_a?(Regexp)
+      my_each { |val| return false unless val.match(pattern) }
+    elsif pattern.is_a?(Module)
+      my_each { |val| return false unless val.is_a?(pattern) }
+    else
+      my_each { |value| return false unless value == pattern}
+    end
+    true
   end
 
   def my_any?
@@ -62,9 +71,20 @@ module Enumerable
     count
   end
 
+  def my_map(a_proc = nil)
+    mapped = []
+      self.my_each do |i|
+        if a_proc && block_given?
+          mapped << a_proc.call(yield(i))
+        elsif block_given? == false
+          mapped << a_proc.call(i)
+        end
+      end
+    mapped
+  end
 
-
-
-
+  def my_inject
+    
+  end
 
 end
