@@ -1,7 +1,9 @@
+# rubocop: disable Metrics/ModuleLength
+# rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 module Enumerable
   def my_each
     return to_enum(:my_each) unless block_given?
-    
+
     for i in self
       yield i
     end
@@ -9,16 +11,18 @@ module Enumerable
 
   def my_each_with_index
     return to_enum(:my_each_with_index) unless block_given?
+
     i = 0
     while i < size
       yield(self[i], i)
-      i =+ 1
+      i = + 1
     end
     self
   end
 
   def my_select
     return to_enum(:my_select) unless block_given?
+
     if is_a?(Array)
       array = []
       my_each do |num|
@@ -127,3 +131,6 @@ module Enumerable
   end
 
 end
+
+# rubocop: enable Metrics/ModuleLength
+# rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
