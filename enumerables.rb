@@ -1,14 +1,13 @@
 module Enumerable
   def my_each
-    i = 0
-    while i < size
-      yield(self[i])
-      i += 1
+    return to_enum(:my_each) unless block_given?
+    for i in self
+      yield i
     end
-    self
   end
 
   def my_each_with_index
+    return to_enum(:my_each_with_index) unless block_given?
     i = 0
     while i < size
       yield(self[i], i)
@@ -18,12 +17,20 @@ module Enumerable
   end
 
   def my_select
-    return enum_for unless block_given?
-    array = []
-    array.my_each do |i|
-      array.push(i) if yield(i) == true
+    return to_enum(:my_select) unless block_given?
+    if is_a?(Array)
+      array = []
+      my_each do |num|
+        array << num if yield(num)
+      end
+      array
+    elsif is_a?(Hash)
+      hash = {}
+      my_each do |key, val|
+        hash[key] = val if yield(key, val)
+      end
+      hash
     end
-    array
   end
 
   def my_all?(pattern)
@@ -77,7 +84,6 @@ module Enumerable
 
   def my_count
     count = 0
-
     self.my_each do |i|
       if block_given?
         count += 1 if yield(i)
@@ -88,49 +94,35 @@ module Enumerable
     count
   end
 
-  def my_map(&proc)
-    return self.to enum unless block_given?
-
-    new_array = []
-    if self.class == Hash
-      self.my_each do |k,v|
-        new_array.push proc.call(k,v)
-      end
-      return new_array
-
-    else
-      self.my_each do |i|
-        new_array.push proc.call(i)
-      end
-      new_array
+  def my_map(&block)
+    array = []
+    each do |i|
+      array << block.call(i)
     end
-
+    array
   end
 
-  def my_inject(*args)
-    total = 0
-    if args[0].class == Symbol
-      sym = args[0]
-      total = self[0]
-      self[1..-1].my_each do |i|
-        total = total.send(sym, i)
-      end
-
-    elsif args.length != 0
-      total = args[0]
-      self.my_each do |i|
-        total = yield(total,i)
-      end
-
-    else
-      total = self[0]
-      self[1..-1].my_each do |i|
-        total = yield(total,i)
-      end
+  def my_inject(accumulator = nil, operation = nil, &block)
+    block = case operation
+      when Symbol
+        lambda { |acc, value| acc.send(operation, value) }
+      when nil
+        block
+      else
+      raise ArgumentError, "the operation provided must be a symbol"
     end
-
-    total
+    if accumulator.nil?
+      ignore_first = true
+      accumulator = first
+    end
+    index = 0
+    my_each do |element|
+      unless ignore_first && index == 0
+        accumulator = block.call(accumulator, element)
+      end
+      index += 1
+    end
+    accumulator
   end
-
 
 end
