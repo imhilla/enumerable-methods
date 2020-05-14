@@ -99,7 +99,7 @@ end
 end
 
 a = [18, 22, 33, 3, 5, 6]
-puts "my_select method : #{a.my_select { |num| num > 10 } }\n\n"
+puts "my_select method :#{a.my_select { |num| num > 10 } }\n\n"
 
 enu1 = [10, 19, 18]
 res1 = enu1.my_all? { |num| num > 4 }
