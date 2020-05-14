@@ -11,10 +11,10 @@ module Enumerable
 
   def my_each_with_index
     return to_enum(:my_each_with_index) unless block_given?
-    index = 0
-    for i in self
-      yield i, index
-      index += 1
+    i = 0
+    my_each do |num|
+      yield(num, i)
+      i += 1
     end
   end
 
