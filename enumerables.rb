@@ -117,7 +117,7 @@ a = [18, 22, 33, nil, 5, 6]
 puts "counting : #{a.my_count}\n\n"
 
 a = [18, 22, 33, 3, 5, 6]
-puts "map method : #{a.my_map { |num| num > 10 } }\n\n"
+puts "map method :#{a.my_map { |num| num > 10 } }\n\n"
 
 def sum(array)
   array.my_inject(0) { |sum, num| sum + num }
