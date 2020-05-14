@@ -41,16 +41,16 @@ module Enumerable
   def my_all?(pattern)
     if pattern.nil?
       if block_given?
-        my_each { |value| return false unless yield(value)}
+        my_each { |value| return false unless yield(value) }
       else
-        my_each { |value| return false unless value}
+        my_each { |value| return false unless value }
       end
     elsif pattern.is_a?(Regexp)
       my_each { |value| return false unless value.match(pattern) }
     elsif pattern.is_a?(Module)
       my_each { |value| return false unless value.is_a?(pattern) }
     else
-      my_each { |value| return false unless value == pattern}
+      my_each { |value| return false unless value == pattern }
     end
     true
   end
@@ -58,7 +58,7 @@ module Enumerable
   def my_any?(pattern)
     if pattern.nil?
       if block_given?
-        my_each { |value| return true if yield(value)}
+        my_each { |value| return true if yield(value) }
       else my_each { |value| return true if value }
       end
     elsif pattern.is_a?(Regexp)
@@ -74,7 +74,7 @@ module Enumerable
   def my_none?(pattern)
     if pattern.nil?
       if block_given?
-        my_each { |value| return false if yield(value)}
+        my_each { |value| return false if yield(value) }
       else my_each { |value| return false if value }
       end
     elsif pattern.is_a?(Regexp)
@@ -87,16 +87,10 @@ module Enumerable
     true
   end
 
-  def my_count
-    count = 0
-    self.my_each do |i|
-      if block_given?
-        count += 1 if yield(i)
-      else
-        count += 1
-      end
-    end
-    count
+  def my_count(count = nil)
+    return count if count
+    return length unless block_given?
+    my_select { |x| yield x }.length
   end
 
   def my_map(&block)
@@ -109,25 +103,25 @@ module Enumerable
 
   def my_inject(accumulator = nil, operation = nil, &block)
     block = case operation
-      when Symbol
-        lambda { |acc, value| acc.send(operation, value) }
-      when nil
-        block
-      else
-      raise ArgumentError, "the operation provided must be a symbol"
-    end
-    if accumulator.nil?
-      ignore_first = true
-      accumulator = first
-    end
-    index = 0
-    my_each do |element|
-      unless ignore_first && index == 0
-        accumulator = block.call(accumulator, element)
-      end
-      index += 1
-    end
-    accumulator
+            when Symbol
+              lambda { |acc, value| acc.send(operation, value) }
+            when nil
+              block
+            else
+              raise ArgumentError, "the operation provided must be a symbol"
+            end
+            if accumulator.nil?
+              ignore_first = true
+              accumulator = first
+            end
+            index = 0
+            my_each do |element|
+              unless ignore_first && index == 0
+                accumulator = block.call(accumulator, element)
+              end
+              index += 1
+            end
+            accumulator
   end
 
 end
