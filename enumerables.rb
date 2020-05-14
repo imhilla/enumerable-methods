@@ -90,6 +90,7 @@ module Enumerable
   def my_count(count = nil)
     return count if count
     return length unless block_given?
+
     my_select { |x| yield x }.length
   end
 
