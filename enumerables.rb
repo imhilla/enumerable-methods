@@ -90,9 +90,6 @@ module Enumerable
   end
 end
 
-# rubocop: enable Metrics/ModuleLength
-# rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
-
 #tests
 [1, 2, 3].my_each do |n|
   text = "Current number is: #{n}"
@@ -130,3 +127,6 @@ def sum(array)
   array.my_inject(0) { |sum, num| sum + num }
 end
 p sum([5, 10, 20])
+
+# rubocop: enable Metrics/ModuleLength
+# rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
