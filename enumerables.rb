@@ -11,13 +11,11 @@ module Enumerable
 
   def my_each_with_index
     return to_enum(:my_each_with_index) unless block_given?
-
-    i = 0
-    while i < size
-      yield(self[i], i)
-      i = + 1
+    index = 0
+    for i in self
+      yield i, index
+      index += 1
     end
-    self
   end
 
   def my_select
@@ -126,3 +124,15 @@ end
 
 # rubocop: enable Metrics/ModuleLength
 # rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+
+#tests
+[1, 2, 3].my_each do |n|
+  text = "Current number is: #{n}"
+  puts text
+end
+
+hash = Hash.new
+%w(cat dog wombat).my_each_with_index { |item, index|
+  hash[item] = index
+}
+puts hash 
