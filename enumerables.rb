@@ -1,5 +1,3 @@
-# rubocop: disable Metrics/ModuleLength
-# rubocop: disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 module Enumerable
   def my_each
     return to_enum(:my_each) unless block_given?
@@ -93,5 +91,3 @@ module Enumerable
     accumulator
   end
 end
-# rubocop: enable Metrics/ModuleLength
-# rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
