@@ -112,12 +112,12 @@ module Enumerable
               raise ArgumentError, 'the operation provided must be a symbol'
             end
     if accumulator.nil?
-      ignore_first = true
+      ignore_first = false
       accumulator = first
     end
     index = 0
     my_each do |element|
-      unless ignore_first && index.zero?
+      if ignore_first && index.zero?
         accumulator = block.call(accumulator, element)
       end
       index += 1
