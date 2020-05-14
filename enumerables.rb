@@ -116,14 +116,13 @@ module Enumerable
     end
     index = 0
     my_each do |element|
-      unless ignore_first && index == 0
+      unless ignore_first && index.zero?
         accumulator = block.call(accumulator, element)
       end
       index += 1
     end
     accumulator
   end
-
 end
 
 # rubocop: enable Metrics/ModuleLength
