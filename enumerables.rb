@@ -117,9 +117,7 @@ module Enumerable
     end
     index = 0
     my_each do |element|
-      unless ignore_first && index.zero?
-        accumulator = block.call(accumulator, element)
-      end
+      accumulator = block.call(accumulator, element) unless ignore_first && index.zero?
       index += 1
     end
     accumulator
