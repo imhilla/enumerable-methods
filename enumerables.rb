@@ -11,6 +11,7 @@ module Enumerable
 
   def my_each_with_index
     return to_enum(:my_each_with_index) unless block_given?
+
     i = 0
     my_each do |num|
       yield(num, i)
@@ -38,18 +39,21 @@ module Enumerable
 
   def my_all?
     return to_enum(:my_all) unless block_given?
+
     result = my_select { |x| yield x }
     length == result.length
   end
 
   def my_any?
     return to_enum(:my_any) unless block_given?
+
     result = my_select { |x| yield x }
     result.length.positive?
   end
 
   def my_none?
     return to_enum(:my_none) unless block_given?
+
     !my_any?
   end
 
@@ -89,44 +93,5 @@ module Enumerable
     accumulator
   end
 end
-
-#tests
-[1, 2, 3].my_each do |n|
-  text = "Current number is: #{n}"
-  puts text
-end
-
-hash = Hash.new
-%w(cat dog wombat).my_each_with_index { |item, index|
-  hash[item] = index
-}
-puts hash 
-
-a = [18, 22, 33, 3, 5, 6] 
-puts "my_select method : #{a.my_select {|num| num > 10 }}\n\n"
-
-enu1 = [10, 19, 18] 
-res1 = enu1.my_all? { |num| num>4}
-puts res1
-
-enu1 = [10, 19, 18] 
-res1 = enu1.none? { |num| num>4}
-puts res1
-
-enu1 = [10, 19, 18] 
-res1 = enu1.any? { |num| num>4}
-puts res1
-
-a = [18, 22, 33, nil, 5, 6]
-puts "counting : #{a.my_count}\n\n"
-
-a = [18, 22, 33, 3, 5, 6] 
-puts "map method : #{a.my_map {|num| num > 10 }}\n\n"
-
-def sum(array)
-  array.my_inject(0) { |sum, num| sum + num }
-end
-p sum([5, 10, 20])
-
 # rubocop: enable Metrics/ModuleLength
 # rubocop: enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
