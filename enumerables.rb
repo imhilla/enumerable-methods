@@ -36,53 +36,21 @@ module Enumerable
     end
   end
 
-  def my_all?(pattern)
-    if pattern.nil?
-      if block_given?
-        my_each { |value| return false unless yield(value) }
-      else
-        my_each { |value| return false unless value }
-      end
-    elsif pattern.is_a?(Regexp)
-      my_each { |value| return false unless value.match(pattern) }
-    elsif pattern.is_a?(Module)
-      my_each { |value| return false unless value.is_a?(pattern) }
-    else
-      my_each { |value| return false unless value == pattern }
-    end
-    true
+  def my_all?
+    return to_enum(:my_all) unless block_given?
+    result = my_select { |x| yield x }
+    length == result.length
   end
 
-  def my_any?(pattern)
-    if pattern.nil?
-      if block_given?
-        my_each { |value| return true if yield(value) }
-      else my_each { |value| return true if value }
-      end
-    elsif pattern.is_a?(Regexp)
-      my_each { |value| return true if value.match(pattern) }
-    elsif pattern.is_a?(Module)
-      my_each { |value| return true if value.is_a?(pattern) }
-    else
-      my_each { |value| return true if value == pattern }
-    end
-    false
+  def my_any?
+    return to_enum(:my_any) unless block_given?
+    result = my_select { |x| yield x }
+    result.length.positive?
   end
 
-  def my_none?(pattern)
-    if pattern.nil?
-      if block_given?
-        my_each { |value| return false if yield(value) }
-      else my_each { |value| return false if value }
-      end
-    elsif pattern.is_a?(Regexp)
-      my_each { |value| return false if value.match(pattern) }
-    elsif pattern.is_a?(Module)
-      my_each { |value| return false if value.is_a?(pattern) }
-    else
-      my_each { |value| return false if value == pattern }
-    end
-    true
+  def my_none?
+    return to_enum(:my_none) unless block_given?
+    !my_any?
   end
 
   def my_count(count = nil)
@@ -141,7 +109,7 @@ a = [18, 22, 33, 3, 5, 6]
 puts "my_select method : #{a.my_select {|num| num > 10 }}\n\n"
 
 enu1 = [10, 19, 18] 
-res1 = enu1.all? { |num| num>4}
+res1 = enu1.my_all? { |num| num>4}
 puts res1
 
 enu1 = [10, 19, 18] 
