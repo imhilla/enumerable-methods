@@ -98,13 +98,6 @@ end
   puts text
 end
 
-[5, 10, 15, 20, 25, 30].my_each_with_index do |num, idx| 
-  puts "#{num}"
-  if ((idx) % 2 == 0) 
-    puts "end of line" 
-  end 
-end 
-
 a = [18, 22, 33, 3, 5, 6]
 puts "my_select method : #{a.my_select { |num| num > 10 } }\n\n"
 
