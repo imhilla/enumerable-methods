@@ -88,12 +88,49 @@ module Enumerable
     count
   end
 
-  def my_map
-  
+  def my_map(&proc)
+    return self.to enum unless block_given?
+
+    new_array = []
+    if self.class == Hash
+      self.my_each do |k,v|
+        new_array.push proc.call(k,v)
+      end
+      return new_array
+
+    else
+      self.my_each do |i|
+        new_array.push proc.call(i)
+      end
+      new_array
+    end
+
   end
 
-  def my_inject
-   
+  def my_inject(*args)
+    total = 0
+    if args[0].class == Symbol
+      sym = args[0]
+      total = self[0]
+      self[1..-1].my_each do |i|
+        total = total.send(sym, i)
+      end
+
+    elsif args.length != 0
+      total = args[0]
+      self.my_each do |i|
+        total = yield(total,i)
+      end
+
+    else
+      total = self[0]
+      self[1..-1].my_each do |i|
+        total = yield(total,i)
+      end
+    end
+
+    total
   end
+
 
 end
