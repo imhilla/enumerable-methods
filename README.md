@@ -12,16 +12,25 @@ module Enumerable
   end
 
 Created #my_each, a method that is identical to #each.
+
 Created #my_each_with_index in the same way.
+
 Created #my_select in the same way
+
 Created #my_all?
+
 Created #my_any?
+
 Created #my_none?
+
 Created #my_count
+
 Created #my_map
+
 Created #my_inject
 
-Later i added examples to show that the methods works same us the inbuilt methods Ruby offers.
+
+Lastly, i added examples to show that the methods works same us the inbuilt methods Ruby offers.
 
 Built With
 
