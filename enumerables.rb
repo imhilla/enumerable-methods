@@ -58,11 +58,20 @@ module Enumerable
     true
   end
 
-  def my_any?
-    return to_enum(:my_any) unless block_given?
-
-    result = my_select { |x| yield x }
-    result.length.positive?
+  def my_any?(pattern = nil)
+    if pattern.nil?
+      if block_given?
+        my_each { |value| return true if yield(value) }
+      else my_each { |value| return true if value }
+      end
+    elsif pattern.is_a?(Regexp)
+      my_each { |value| return true if value.match(pattern) }
+    elsif pattern.is_a?(Module)
+      my_each { |value| return true if value.is_a?(pattern) }
+    else
+      my_each { |value| return true if value == pattern }
+    end
+    false
   end
 
   def my_none?
