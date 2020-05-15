@@ -1,9 +1,16 @@
 module Enumerable
   def my_each
-    return to_enum(:my_each) unless block_given?
+    return to_enum :my_each unless block_given?
 
-    each do |num|
-      yield(num)
+    index = 0
+    while index < size
+
+      case self.class.name
+      when 'Hash' then yield(keys[index], self[keys[index]])
+      when 'Array' then yield(self[index])
+      when 'Range' then yield(to_a[index])
+      end
+      index += 1
     end
   end
 
