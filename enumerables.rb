@@ -2,15 +2,15 @@ module Enumerable
   def my_each
     return to_enum :my_each unless block_given?
 
-    index = 0
-    while index < size
+    i = 0
+    while i < size
 
       case self.class.name
-      when 'Hash' then yield(keys[index], self[keys[index]])
-      when 'Array' then yield(self[index])
-      when 'Range' then yield(to_a[index])
+      when 'Hash' then yield(keys[i], self[keys[i]])
+      when 'Array' then yield(self[i])
+      when 'Range' then yield(to_a[i])
       end
-      index += 1
+      i += 1
     end
   end
 
