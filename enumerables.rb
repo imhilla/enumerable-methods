@@ -76,10 +76,20 @@ module Enumerable
     false
   end
 
-  def my_none?
-    return to_enum(:my_none) unless block_given?
-
-    !my_any?
+  def my_none?(pattern = nil)
+    if pattern.nil?
+      if block_given?
+        my_each { |value| return false if yield(value) }
+      else my_each { |value| return false if value }
+      end
+    elsif pattern.is_a?(Regexp)
+      my_each { |value| return false if value.match(pattern) }
+    elsif pattern.is_a?(Module)
+      my_each { |value| return false if value.is_a?(pattern) }
+    else
+      my_each { |value| return false if value == pattern }
+    end
+    true
   end
 
   def my_count(count = nil)
