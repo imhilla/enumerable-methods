@@ -42,11 +42,20 @@ module Enumerable
     end
   end
 
-  def my_all?
-    return to_enum(:my_all) unless block_given?
-
-    result = my_select { |x| yield x }
-    length == result.length
+  def my_all?(pattern = nil)
+    if pattern.nil?
+      if block_given?
+        my_each { |value| return false unless yield(value) }
+      else my_each { |value| return false unless value }
+      end
+    elsif pattern.is_a?(Regexp)
+      my_each { |value| return false unless value.match(pattern) }
+    elsif pattern.is_a?(Module)
+      my_each { |value| return false unless value.is_a?(pattern) }
+    else
+      my_each { |value| return false unless value == pattern }
+    end
+    true
   end
 
   def my_any?
